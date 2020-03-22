@@ -13,9 +13,11 @@ pipeline {
         }
         stage('Deploy') {
             steps {
+            	dir("/jar"){
+            	    sh "chmod 777 /jar"
+            	}
             	dir("/var/lib/jenkins/workspace/Home_Automation/build/libs"){
             		//sh "chmod 777 /var/lib/jenkins/workspace/Home_Automation/build/libs"
-            		sh "chmod 777 /jar"
             	    sh "cp homeAutomation.jar /jar"
 	                echo "Starting java application deployment"
 	                sh "java -jar homeAutomation.jar"
