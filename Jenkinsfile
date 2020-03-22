@@ -1,19 +1,29 @@
 pipeline {
     agent any
     stages {
-        stage('---clean---') {
+        stage('Build') {
             steps {
-                echo "clean stage"
+                sh cd /var/lib/jenkins/workspace/Home_Automation
+                sh sudo chmod 777 /var/lib/jenkins/workspace/Home_Automation
+                echo "Gradle build started"
+                sh gradle build
+                echo "Gradle build completed"
+                sh cd build/libs
             }
         }
-        stage('--test--') {
+        stage('Deploy') {
             steps {
-                echo "test stage"
+                sh sudo cp homeAutomation.jar /jar
+                echo "Starting java application deployment"
+                sh java -jar homeAutomation.jar
+                echo "Java application deployment completed"
             }
         }
-        stage('--package--') {
+        stage('Clean Workspace') {
             steps {
-                echo "package stage"
+                sh cd /var/lib/jenkins/workspace
+                sh sudo rm -r Home_Automation
+                echo "Jenkins workspace cleaned"
             }
         }
     }
