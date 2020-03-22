@@ -19,7 +19,9 @@ pipeline {
             	dir("/jar/home_automation"){
             		script{
             			echo "kill application running in port 9090"
-            			sh 'fuser -k 9090/tcp'
+            			sh '''
+            				fuser -k 9090/tcp
+        				'''
             			//withEnv(['JENKINS_NODE_COOKIE=DontKillMe']) {
             			//	echo "Starting java application deployment"
 	                	//	sh 'nohup java -jar homeAutomation.jar &'
