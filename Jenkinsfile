@@ -18,8 +18,10 @@ pipeline {
             	}
             	dir("/jar/home_automation"){
             		script{
+            			echo "kill existing application running in port 9090"
+            			sh 'kill -9 $(sudo lsof -t -i:9090)'
             		    echo "Starting java application deployment"
-	                	sh "java -jar homeAutomation.jar"
+	                	sh "nohup java -jar homeAutomation.jar"
 	                	echo "Java application deployment completed"
             		}
             	}
