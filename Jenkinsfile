@@ -13,7 +13,9 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-            	fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: '/var/lib/jenkins/workspace/Home_Automation/build/libs/homeAutomation.jar', renameFiles: false, sourceCaptureExpression: '', targetLocation: '/jar', targetNameExpression: '')])
+            	dir("/var/lib/jenkins/workspace/Home_Automation/build/libs"){
+	            	fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: 'homeAutomation.jar', renameFiles: false, sourceCaptureExpression: '', targetLocation: '/jar', targetNameExpression: '')])
+            	}
             	dir("/jar"){
             		//sh "chmod 777 /var/lib/jenkins/workspace/Home_Automation/build/libs"
             	    //sh "cp homeAutomation.jar /jar"
