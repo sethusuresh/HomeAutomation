@@ -14,7 +14,7 @@ pipeline {
         stage('Deploy') {
             steps {
             	dir("/var/lib/jenkins/workspace/Home_Automation/build/libs"){
-            	    sh "sudo cp homeAutomation.jar /jar"
+            	    sh "cp homeAutomation.jar /jar"
 	                echo "Starting java application deployment"
 	                sh "java -jar homeAutomation.jar"
 	                echo "Java application deployment completed"
@@ -24,7 +24,7 @@ pipeline {
         stage('Clean Workspace') {
             steps {
             	dir("/var/lib/jenkins/workspace"){
-	                sh "sudo rm -r Home_Automation"
+	                sh "rm -r Home_Automation"
 	                echo "Jenkins workspace cleaned"
             	}
             }
