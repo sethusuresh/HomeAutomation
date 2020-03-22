@@ -27,13 +27,5 @@ pipeline {
             	}
             }
         }
-        stage('Clean Workspace') {
-            steps {
-            	dir("/var/lib/jenkins/workspace"){
-	                sh "rm -r Home_Automation"
-	                echo "Jenkins workspace cleaned"
-            	}
-            }
-        }
     }
 }
