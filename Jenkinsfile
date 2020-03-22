@@ -13,16 +13,16 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sh sudo cp homeAutomation.jar /jar
+                sh "sudo cp homeAutomation.jar /jar"
                 echo "Starting java application deployment"
-                sh java -jar homeAutomation.jar
+                sh "java -jar homeAutomation.jar"
                 echo "Java application deployment completed"
             }
         }
         stage('Clean Workspace') {
             steps {
                 sh cd /var/lib/jenkins/workspace
-                sh sudo rm -r Home_Automation
+                sh "sudo rm -r Home_Automation"
                 echo "Jenkins workspace cleaned"
             }
         }
