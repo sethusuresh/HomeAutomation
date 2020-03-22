@@ -13,12 +13,10 @@ pipeline {
         }
         stage('Deploy') {
             steps {
+            	fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: '/var/lib/jenkins/workspace/Home_Automation/build/libs/homeAutomation.jar', renameFiles: false, sourceCaptureExpression: '', targetLocation: '/jar', targetNameExpression: '')])
             	dir("/jar"){
-            	    sh "chmod 777 /jar"
-            	}
-            	dir("/var/lib/jenkins/workspace/Home_Automation/build/libs"){
             		//sh "chmod 777 /var/lib/jenkins/workspace/Home_Automation/build/libs"
-            	    sh "cp homeAutomation.jar /jar"
+            	    //sh "cp homeAutomation.jar /jar"
 	                echo "Starting java application deployment"
 	                sh "java -jar homeAutomation.jar"
 	                echo "Java application deployment completed"
