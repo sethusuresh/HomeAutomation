@@ -8,7 +8,7 @@ pipeline {
                 echo "Gradle build started"
                 sh gradle build
                 echo "Gradle build completed"
-                sh cd build/libs
+                sh cd /var/lib/jenkins/workspace/Home_Automation/build/libs
             }
         }
         stage('Deploy') {
