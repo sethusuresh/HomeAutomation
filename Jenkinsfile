@@ -24,7 +24,8 @@ pipeline {
         				//'''
             			//withEnv(['JENKINS_NODE_COOKIE=DontKillMe']) {
             				echo "Starting java application deployment"
-	                		sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar homeAutomation.jar &'
+	                		//sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar homeAutomation.jar &'
+	                		sh 'java -jar homeAutomation.jar'
 	                		echo "checking if the process has started:- "
 	                		//sh 'lsof -t -i:9090'
 	                		echo "Java application deployment completed"
