@@ -19,7 +19,7 @@ pipeline {
             	dir("/jar/home_automation"){
             		script{
             			echo "kill application running in port 9090"
-            			sh 'lsof -t -i:9090'
+            			sh 'kill -9 $(lsof -t -i:9090)'
         				//echo "Starting java application deployment"
                 		//sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar homeAutomation.jar &'
                 		//echo "Java application deployment completed"
