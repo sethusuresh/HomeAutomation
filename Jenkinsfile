@@ -23,6 +23,7 @@ pipeline {
             				//fuser -k 9090/tcp
         				//'''
             			//withEnv(['JENKINS_NODE_COOKIE=DontKillMe']) {
+            				sh 'JENKINS_NODE_COOKIE=dontKillMe'
             				echo "Starting java application deployment"
 	                		sh 'nohup java -jar homeAutomation.jar &'
 	                		echo "Java application deployment completed"
