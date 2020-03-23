@@ -26,10 +26,13 @@ pipeline {
             	}
             }
         }
-        stage('Workspace clean') {
+        stage('Workspace cleanup') {
             steps {
             	cleanWs notFailBuild: true
             	dir("/var/lib/jenkins/workspace/Home_Automation@tmp"){
+            	    deleteDir()
+            	}
+            	dir("/jar/home_automation@tmp"){
             	    deleteDir()
             	}
             }
