@@ -29,6 +29,9 @@ pipeline {
         stage('Workspace clean') {
             steps {
             	cleanWs notFailBuild: true
+            	dir("/var/lib/jenkins/workspace/Home_Automation@tmp"){
+            	    deleteDir()
+            	}
             }
         }
     }
