@@ -4,7 +4,6 @@ pipeline {
         stage('Build') {
             steps {
             	dir("/var/lib/jenkins/workspace/Home_Automation"){
-	                //sh "chmod 777 /var/lib/jenkins/workspace/Home_Automation"
 	                echo "Gradle build started"
 	                sh "gradle build"
 	                echo "Gradle build completed"
@@ -25,6 +24,11 @@ pipeline {
                 		echo "Java application deployment completed"
             		}
             	}
+            }
+        }
+        stage('Workspace clean') {
+            steps {
+            	cleanWs notFailBuild: true
             }
         }
     }
