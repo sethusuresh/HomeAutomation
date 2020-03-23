@@ -10,11 +10,15 @@ pipeline {
             	}
             }
         }
-        stage('Deploy') {
+        stage('Copying JAR') {
             steps {
             	dir("/var/lib/jenkins/workspace/Home_Automation/build/libs"){
 	            	fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: 'homeAutomation.jar', renameFiles: false, sourceCaptureExpression: '', targetLocation: '/jar/home_automation', targetNameExpression: '')])
             	}
+            }
+        }
+        stage('Deploy') {
+            steps {
             	dir("/jar/home_automation"){
             		script{
             			echo "kill application running in port 9090"
