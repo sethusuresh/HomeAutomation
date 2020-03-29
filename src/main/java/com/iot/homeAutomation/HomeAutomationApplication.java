@@ -15,6 +15,7 @@ public class HomeAutomationApplication {
 		System.out.println("Welcome to Home Automation Project");
 	}
 	
+	//testing
 	@RequestMapping(value = "/keepalive", method = RequestMethod.GET)
 	public String health() {
 		return "OK";
