@@ -1,4 +1,4 @@
-package com.iot.homeAutomation.UserActivity;
+package com.iot.homeAutomation.UserActivityAudit;
 
 import javax.annotation.Resource;
 

@@ -12,7 +12,6 @@ public class HomeAutomationApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(HomeAutomationApplication.class, args);
-		System.out.println("Welcome to Home Automation Project");
 	}
 	
 	@RequestMapping(value = "/keepalive", method = RequestMethod.GET)

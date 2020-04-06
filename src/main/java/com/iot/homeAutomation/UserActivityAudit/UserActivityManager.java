@@ -1,4 +1,4 @@
-package com.iot.homeAutomation.UserActivity;
+package com.iot.homeAutomation.UserActivityAudit;
 
 public interface UserActivityManager {
 	
