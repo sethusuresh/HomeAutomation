@@ -1,10 +1,19 @@
 package com.iot.homeAutomation.User.DTO;
 
-public class RoleDTO {
+import java.util.List;
+
+public class UserDeviceDTO {
 
 	private String deviceName;
 	private String deviceId;
-	private String roleList;
+	private List<String> roleList;
+
+	public UserDeviceDTO(String deviceName, String deviceId, List<String> roleList) {
+		super();
+		this.deviceName = deviceName;
+		this.deviceId = deviceId;
+		this.roleList = roleList;
+	}
 
 	public String getDeviceName() {
 		return deviceName;
@@ -22,11 +31,11 @@ public class RoleDTO {
 		this.deviceId = deviceId;
 	}
 
-	public String getRoleList() {
+	public List<String> getRoleList() {
 		return roleList;
 	}
 
-	public void setRoleList(String roleList) {
+	public void setRoleList(List<String> roleList) {
 		this.roleList = roleList;
 	}
 

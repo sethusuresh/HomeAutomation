@@ -2,16 +2,27 @@ package com.iot.homeAutomation.User.DTO;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "user")
 public class UserDTO {
 
+	@Id
+	private String id;
 	@Indexed
 	private String userId;
 	private String userName;
-	private List<RoleDTO> rolesList;
+	private List<UserDeviceDTO> userDeviceList;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public String getUserId() {
 		return userId;
@@ -29,12 +40,12 @@ public class UserDTO {
 		this.userName = userName;
 	}
 
-	public List<RoleDTO> getRolesList() {
-		return rolesList;
+	public List<UserDeviceDTO> getUserDeviceList() {
+		return userDeviceList;
 	}
 
-	public void setRolesList(List<RoleDTO> rolesList) {
-		this.rolesList = rolesList;
+	public void setUserDeviceList(List<UserDeviceDTO> rolesList) {
+		this.userDeviceList = rolesList;
 	}
 
 }

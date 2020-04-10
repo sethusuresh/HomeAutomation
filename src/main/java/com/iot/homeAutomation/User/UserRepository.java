@@ -6,5 +6,7 @@ public interface UserRepository {
 
 	public boolean checkAndAddUser(UserDTO user) throws Exception;
 
-	UserDTO getUserForUserId(String userId) throws Exception;
+	UserDTO findUserById(String userId) throws Exception;
+
+	void saveUser(UserDTO user) throws Exception;
 }

@@ -1,5 +1,8 @@
 package com.iot.homeAutomation.Device;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.annotation.Resource;
 
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -36,7 +39,45 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 			System.out.println("Device name updated to:- " + device.getName() + " for deviceId:- " + device.getId());
 		} catch (Exception e) {
 			System.out.println("Device name update failed for deviceId:- " + device.getId());
-			e.printStackTrace();
+			throw new Exception();
+		}
+	}
+	
+	@Override
+	public DeviceDTO findDeviceById(String deviceId) throws Exception {
+		DeviceDTO device = new DeviceDTO();
+		try {
+			Query query = new Query(Criteria.where("id").is(deviceId));
+			device = mongoOperations.findOne(query, DeviceDTO.class);
+			System.out.println("Fetched device from DB for deviceId:- " + deviceId);
+		} catch (Exception e) {
+			System.out.println("Error in finding device from DB for deviceId:- " + deviceId);
+			throw new Exception();
+		}
+		return device;
+	}
+	
+	@Override
+	public List<DeviceDTO> findDeviceByIdList(List<String> deviceIdList) throws Exception{
+		List<DeviceDTO> deviceList = new ArrayList<>();
+		try {
+			Query query = new Query(Criteria.where("id").in(deviceIdList));
+			deviceList = mongoOperations.find(query, DeviceDTO.class);
+			System.out.println("Fetched devices from DB for deviceId in:- " + deviceIdList.toArray().toString());
+		} catch (Exception e) {
+			System.out.println("Error in fetching device from DB for deviceID in:- " + deviceIdList.toArray().toString());
+			throw new Exception();
+		}
+		return deviceList;
+	}
+	
+	@Override
+	public void saveDevice(DeviceDTO device) throws Exception {
+		try {
+			mongoOperations.save(device);
+			System.out.println("device saveed in DB for deviceId:- " + device.getId());
+		} catch (Exception e) {
+			System.out.println("Error saving device in DB for deviceId:- " + device.getId());
 			throw new Exception();
 		}
 	}

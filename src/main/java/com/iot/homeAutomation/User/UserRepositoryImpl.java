@@ -37,17 +37,28 @@ public class UserRepositoryImpl implements UserRepository {
 	}
 
 	@Override
-	public UserDTO getUserForUserId(String userId) throws Exception {
+	public UserDTO findUserById(String userId) throws Exception {
 		UserDTO user = new UserDTO();
 		try {
 			Query query = new Query(Criteria.where("userId").is(userId));
 			user = mongoOperations.findOne(query, UserDTO.class);
 			System.out.println("User fetched from DB for userId:- " + userId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("Error finding user from DB for user Id:- " + userId);
 			throw new Exception();
 		}
 		return user;
+	}
+	
+	@Override
+	public void saveUser(UserDTO user) throws Exception {
+		try {
+			mongoOperations.save(user);
+			System.out.println("User save in DB for userId:- " + user.getUserId());
+		} catch (Exception e) {
+			System.out.println("Error saving user to DB for userId:- " + user.getUserId());
+			throw new Exception();
+		}
 	}
 
 }
