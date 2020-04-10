@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import com.iot.homeAutomation.Device.DeviceDTO;
@@ -21,6 +22,7 @@ import com.iot.homeAutomation.UserActivityAudit.UserAction;
 import com.iot.homeAutomation.UserActivityAudit.UserActivityDTO;
 import com.iot.homeAutomation.UserActivityAudit.UserActivityManager;
 
+@Service
 public class SmartGardenerManagerImpl implements SmartGardenerManager {
 
 	@Resource
