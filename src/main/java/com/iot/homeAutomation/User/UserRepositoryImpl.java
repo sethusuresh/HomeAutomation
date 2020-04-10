@@ -29,12 +29,25 @@ public class UserRepositoryImpl implements UserRepository {
 			} else {
 				System.out.println("User already present in DB for userId:- " + user.getUserId());
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new Exception();
 		}
 		return lReturn;
+	}
+
+	@Override
+	public UserDTO getUserForUserId(String userId) throws Exception {
+		UserDTO user = new UserDTO();
+		try {
+			Query query = new Query(Criteria.where("userId").is(userId));
+			user = mongoOperations.findOne(query, UserDTO.class);
+			System.out.println("User fetched from DB for userId:- " + userId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+		return user;
 	}
 
 }

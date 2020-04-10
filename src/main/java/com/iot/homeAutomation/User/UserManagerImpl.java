@@ -26,5 +26,10 @@ public class UserManagerImpl implements UserManager {
 		userActivityManager.saveUserActivity(userActivity );
 		return isUserAdded;
 	}
+	
+	@Override
+	public UserDTO getUserForUserId(String userId) throws Exception {
+		return userRepository.getUserForUserId(userId);
+	}
 
 }

@@ -3,6 +3,7 @@ package com.iot.homeAutomation.SmartGardener;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.iot.homeAutomation.Device.DeviceDTO;
 import com.iot.homeAutomation.UserActivityAudit.UserActivityDTO;
 
 @Document(collection="user_action")

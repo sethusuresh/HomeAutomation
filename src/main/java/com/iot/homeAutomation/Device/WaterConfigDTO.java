@@ -1,4 +1,4 @@
-package com.iot.homeAutomation.SmartGardener;
+package com.iot.homeAutomation.Device;
 
 public class WaterConfigDTO {
 

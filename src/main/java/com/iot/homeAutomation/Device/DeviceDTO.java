@@ -1,13 +1,20 @@
-package com.iot.homeAutomation.SmartGardener;
+package com.iot.homeAutomation.Device;
 
 import java.util.List;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "device")
 public class DeviceDTO {
 
-	private String name;
+	@Id
 	private String id;
+	private String name;
 	private WaterConfigDTO waterConfig;
 	private List<String> adminList;
+	private List<String> nonAdminList;
+	private boolean status;
 
 	public String getName() {
 		return name;
@@ -39,6 +46,22 @@ public class DeviceDTO {
 
 	public void setAdminList(List<String> adminList) {
 		this.adminList = adminList;
+	}
+
+	public boolean isStatus() {
+		return status;
+	}
+
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+
+	public List<String> getNonAdminList() {
+		return nonAdminList;
+	}
+
+	public void setNonAdminList(List<String> nonAdminList) {
+		this.nonAdminList = nonAdminList;
 	}
 
 }
