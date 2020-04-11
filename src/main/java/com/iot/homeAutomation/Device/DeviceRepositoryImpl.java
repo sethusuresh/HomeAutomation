@@ -11,6 +11,9 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import com.iot.homeAutomation.Device.DTO.DeviceDTO;
+import com.iot.homeAutomation.Device.DTO.WaterConfigDTO;
+
 @Service
 public class DeviceRepositoryImpl implements DeviceRepository {
 

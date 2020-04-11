@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.iot.homeAutomation.Device.DTO.DeviceDTO;
+import com.iot.homeAutomation.Device.DTO.WaterConfigDTO;
 import com.iot.homeAutomation.Util.Response;
 
 @RestController

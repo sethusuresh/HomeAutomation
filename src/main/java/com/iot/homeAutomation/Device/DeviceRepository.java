@@ -2,6 +2,9 @@ package com.iot.homeAutomation.Device;
 
 import java.util.List;
 
+import com.iot.homeAutomation.Device.DTO.DeviceDTO;
+import com.iot.homeAutomation.Device.DTO.WaterConfigDTO;
+
 public interface DeviceRepository {
 
 	public DeviceDTO addDevice() throws Exception;

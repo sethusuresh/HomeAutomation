@@ -9,8 +9,8 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
-import com.iot.homeAutomation.Device.DeviceDTO;
 import com.iot.homeAutomation.Device.DeviceManager;
+import com.iot.homeAutomation.Device.DTO.DeviceDTO;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceAction;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityDTO;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityManager;

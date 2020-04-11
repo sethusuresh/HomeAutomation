@@ -1,4 +1,4 @@
-package com.iot.homeAutomation.Device;
+package com.iot.homeAutomation.Device.DTO;
 
 import java.util.List;
 
