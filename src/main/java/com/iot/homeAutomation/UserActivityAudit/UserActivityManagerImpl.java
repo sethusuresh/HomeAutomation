@@ -12,7 +12,11 @@ public class UserActivityManagerImpl implements UserActivityManager {
 
 	@Override
 	public void saveUserActivity(UserActivityDTO userActivity) {
-		userActivityRepository.saveUserActivity(userActivity);
+		try {
+			userActivityRepository.saveUserActivity(userActivity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 }

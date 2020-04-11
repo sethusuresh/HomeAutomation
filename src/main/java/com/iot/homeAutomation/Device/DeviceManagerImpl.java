@@ -15,6 +15,9 @@ import com.iot.homeAutomation.DeviceActivityAudit.DeviceAction;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityDTO;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityManager;
 import com.iot.homeAutomation.User.UserManager;
+import com.iot.homeAutomation.UserActivityAudit.UserAction;
+import com.iot.homeAutomation.UserActivityAudit.UserActivityDTO;
+import com.iot.homeAutomation.UserActivityAudit.UserActivityManager;
 
 @Service
 public class DeviceManagerImpl implements DeviceManager {
@@ -27,6 +30,9 @@ public class DeviceManagerImpl implements DeviceManager {
 	
 	@Resource
 	UserManager userManager;
+	
+	@Resource
+	UserActivityManager userActivityManager;
 
 	@Override
 	public DeviceDTO addDevice() throws Exception {
@@ -96,6 +102,10 @@ public class DeviceManagerImpl implements DeviceManager {
 		try {
 			if(isAdmin) {
 				deviceRepository.saveWaterConfig(deviceId, waterConfig);
+				DeviceActivityDTO deviceActivity = new DeviceActivityDTO(deviceId, deviceId, DeviceAction.WATER_CONFIG_EDITED.toString(), ZonedDateTime.now().toString(), userId);
+				deviceActivityManager.saveDeviceActivity(deviceActivity);
+				UserActivityDTO userActivity = new UserActivityDTO(userId, userId, deviceId, UserAction.WATER_CONFIG_EDITED.toString(), ZonedDateTime.now().toString());
+				userActivityManager.saveUserActivity(userActivity );
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
