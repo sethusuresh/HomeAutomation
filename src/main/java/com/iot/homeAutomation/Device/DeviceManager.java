@@ -14,4 +14,6 @@ public interface DeviceManager {
 
 	List<DeviceDTO> findAllDeviceByUserId(String userId) throws Exception;
 
+	void saveWaterConfig(WaterConfigDTO waterConfig, String deviceId, String userId) throws Exception;
+
 }

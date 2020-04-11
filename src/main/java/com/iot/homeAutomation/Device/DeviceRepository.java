@@ -13,4 +13,6 @@ public interface DeviceRepository {
 	void saveDevice(DeviceDTO device) throws Exception;
 
 	List<DeviceDTO> findDeviceByIdList(List<String> deviceIdList) throws Exception;
+
+	void saveWaterConfig(String deviceId, WaterConfigDTO waterConfig) throws Exception;
 }

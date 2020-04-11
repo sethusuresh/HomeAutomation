@@ -44,6 +44,18 @@ public class DeviceController {
 		}
 		return response;
 	}
+
+	@RequestMapping(value="/{deviceId}/saveWaterConfig", method=RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Response<Boolean> saveWaterConfig(@RequestBody WaterConfigDTO waterConfig, @RequestHeader String deviceId, @RequestHeader String userId) {
+		Response<Boolean> response;
+		try {
+			deviceManager.saveWaterConfig(waterConfig, deviceId, userId);
+			response = new Response<Boolean>("200", "Success", true);
+		} catch (Exception e) {
+			response = new Response<Boolean>("500", "Failed", false);
+		}
+		return response;
+	}
 	
 	@RequestMapping(value = "/getAllDevices", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Response<List<DeviceDTO>> findAllDeviceByUserId(@RequestHeader String userId) {

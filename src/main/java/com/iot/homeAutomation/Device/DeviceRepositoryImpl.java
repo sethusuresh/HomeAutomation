@@ -81,5 +81,18 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 			throw new Exception();
 		}
 	}
-
+	
+	@Override
+	public void saveWaterConfig(String deviceId, WaterConfigDTO waterConfig) throws Exception {
+		try {
+			Query query = new Query(Criteria.where("id").is(deviceId));
+			Update updateQuery = new Update().set("waterConfig", waterConfig);
+			mongoOperations.updateFirst(query, updateQuery, DeviceDTO.class);
+			System.out.println("Water config updated for deviceId:- " + deviceId);
+		} catch (Exception e) {
+			System.out.println("Error updating water config for deviceId:- " + deviceId);
+			throw new Exception();
+		}
+	}
+	
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceAction;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityDTO;
@@ -85,6 +86,35 @@ public class DeviceManagerImpl implements DeviceManager {
 			e.printStackTrace();
 			throw new Exception();
 		}
+	}
+	
+	@Override
+	public void saveWaterConfig(WaterConfigDTO waterConfig, String deviceId, String userId) throws Exception {
+		boolean isAdmin = checkUserIsAdmin(deviceId, userId);
+		try {
+			if(isAdmin) {
+				deviceRepository.saveWaterConfig(deviceId, waterConfig);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+	}
+
+	private boolean checkUserIsAdmin(String deviceId, String userId) throws Exception {
+		boolean isAdmin = false;
+		DeviceDTO device;
+		try {
+			device = deviceRepository.findDeviceById(deviceId);
+			if(!ObjectUtils.isEmpty(device) && !ObjectUtils.isEmpty(device.getAdminList())) {
+				isAdmin = device.getAdminList().contains(userId);
+			}
+			System.out.println("User with userID:- " + userId + " has Admin:- " + isAdmin + " for deviceId:- " + deviceId);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+		return isAdmin;
 	}
 
 }
