@@ -6,14 +6,19 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iot.homeAutomation.Device.DTO.DeviceDTO;
 import com.iot.homeAutomation.Device.DTO.WaterConfigDTO;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceAction;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityDTO;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityManager;
+import com.iot.homeAutomation.MQTT.MQTTStreamManager;
+import com.iot.homeAutomation.MQTT.MQTTTopics;
+import com.iot.homeAutomation.SmartGardener.SmartGardenerRequestDTO;
 import com.iot.homeAutomation.User.UserManager;
 import com.iot.homeAutomation.UserActivityAudit.UserAction;
 import com.iot.homeAutomation.UserActivityAudit.UserActivityDTO;
@@ -33,6 +38,15 @@ public class DeviceManagerImpl implements DeviceManager {
 	
 	@Resource
 	UserActivityManager userActivityManager;
+	
+	@Resource
+	MQTTStreamManager mqttStreamManager;
+	
+	@Autowired
+	ObjectMapper mapper;
+	
+	@Resource
+	MQTTTopics mqttTopics;
 
 	@Override
 	public DeviceDTO addDevice() throws Exception {
@@ -102,6 +116,9 @@ public class DeviceManagerImpl implements DeviceManager {
 		try {
 			if(isAdmin) {
 				deviceRepository.saveWaterConfig(deviceId, waterConfig);
+				SmartGardenerRequestDTO request = new SmartGardenerRequestDTO(deviceId, userId, DeviceAction.WATER_CONFIG_EDITED.toString(), waterConfig);
+				String message = mapper.writeValueAsString(request);
+				mqttStreamManager.publishMessage(message, mqttTopics.getSmartGardenerPubTopic(deviceId));
 				DeviceActivityDTO deviceActivity = new DeviceActivityDTO(deviceId, deviceId, DeviceAction.WATER_CONFIG_EDITED.toString(), ZonedDateTime.now().toString(), userId);
 				deviceActivityManager.saveDeviceActivity(deviceActivity);
 				UserActivityDTO userActivity = new UserActivityDTO(userId, userId, deviceId, UserAction.WATER_CONFIG_EDITED.toString(), ZonedDateTime.now().toString());
@@ -113,7 +130,8 @@ public class DeviceManagerImpl implements DeviceManager {
 		}
 	}
 
-	private boolean checkUserIsAdmin(String deviceId, String userId) throws Exception {
+	@Override
+	public boolean checkUserIsAdmin(String deviceId, String userId) throws Exception {
 		boolean isAdmin = false;
 		DeviceDTO device;
 		try {

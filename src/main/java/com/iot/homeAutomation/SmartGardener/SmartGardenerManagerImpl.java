@@ -6,14 +6,19 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iot.homeAutomation.Device.DeviceManager;
 import com.iot.homeAutomation.Device.DTO.DeviceDTO;
+import com.iot.homeAutomation.Device.DTO.WaterConfigDTO;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceAction;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityDTO;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityManager;
+import com.iot.homeAutomation.MQTT.MQTTStreamManager;
+import com.iot.homeAutomation.MQTT.MQTTTopics;
 import com.iot.homeAutomation.User.UserManager;
 import com.iot.homeAutomation.User.UserRoles;
 import com.iot.homeAutomation.User.DTO.UserDTO;
@@ -37,6 +42,15 @@ public class SmartGardenerManagerImpl implements SmartGardenerManager {
 	@Resource
 	UserActivityManager userActivityManager;
 	
+	@Resource
+	MQTTStreamManager mqttStreamManager;
+	
+	@Autowired
+	ObjectMapper mapper;
+	
+	@Autowired
+	MQTTTopics mqttTopics;
+	
 	@Override
 	public String mapUserToDevice(String deviceId, String userId) throws Exception {
 		String userRequestStatus = null;
@@ -54,6 +68,31 @@ public class SmartGardenerManagerImpl implements SmartGardenerManager {
 			}
 		}
 		return userRequestStatus;
+	}
+	
+	@Override
+	public boolean startWatering(String deviceId, String userId) throws Exception {
+		boolean lReturn = false;
+		try {
+			boolean isAdmin = deviceManager.checkUserIsAdmin(deviceId, userId);
+			if(isAdmin) {
+				//check device status. if device online
+				WaterConfigDTO waterConfig = new WaterConfigDTO();
+				waterConfig.setWaterNow(true);
+				SmartGardenerRequestDTO request = new SmartGardenerRequestDTO(deviceId, userId, DeviceAction.WATERING_STARTED.toString(), waterConfig);
+				String message = mapper.writeValueAsString(request);
+				mqttStreamManager.publishMessage(message, mqttTopics.getSmartGardenerPubTopic(deviceId));
+				DeviceActivityDTO deviceActivity = new DeviceActivityDTO(deviceId, deviceId, DeviceAction.WATERING_STARTED.toString(), ZonedDateTime.now().toString(), userId);
+				deviceActivityManager.saveDeviceActivity(deviceActivity);
+				UserActivityDTO userActivity = new UserActivityDTO(userId, userId, deviceId, UserAction.WATERING_STARTED.toString(), ZonedDateTime.now().toString());
+				userActivityManager.saveUserActivity(userActivity );
+				lReturn = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new Exception();
+		}
+		return lReturn;
 	}
 
 	private void addUserToDeviceAdminList(UserDTO user, DeviceDTO device) throws Exception {

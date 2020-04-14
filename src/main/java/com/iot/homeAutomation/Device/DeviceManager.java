@@ -19,4 +19,6 @@ public interface DeviceManager {
 
 	void saveWaterConfig(WaterConfigDTO waterConfig, String deviceId, String userId) throws Exception;
 
+	boolean checkUserIsAdmin(String deviceId, String userId) throws Exception;
+
 }

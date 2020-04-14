@@ -28,4 +28,17 @@ public class SmartGardenerController {
 		}
 		return response;
 	}
+	
+	@RequestMapping(value = "/{deviceId}/waterNow", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Response<Boolean> waterNow(@PathVariable String deviceId, @RequestHeader String userId) {
+		Response<Boolean> response;
+		try {
+			boolean isWateringStarted = smartGardenerManager.startWatering(deviceId, userId);
+			response = new Response<Boolean>("200", "Success", isWateringStarted);
+		} catch (Exception e) {
+			response = new Response<Boolean>("500", "Failed", false);
+		}
+		return response;
+	}
+	
 }
