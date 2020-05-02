@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -30,6 +32,7 @@ import com.iot.homeAutomation.UserActivityAudit.UserActivityManager;
 @Service
 public class SmartGardenerManagerImpl implements SmartGardenerManager {
 
+	private static final Logger logger = LoggerFactory.getLogger(SmartGardenerManagerImpl.class);
 	@Resource
 	DeviceManager deviceManager;
 	
@@ -89,7 +92,7 @@ public class SmartGardenerManagerImpl implements SmartGardenerManager {
 				lReturn = true;
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in startWatering for deviceId:- {} and UserId:- {}", deviceId, userId, e);
 			throw new Exception();
 		}
 		return lReturn;

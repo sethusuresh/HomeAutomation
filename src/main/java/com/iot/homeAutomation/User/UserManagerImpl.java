@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.iot.homeAutomation.User.DTO.UserDTO;
@@ -16,6 +18,7 @@ import com.iot.homeAutomation.UserActivityAudit.UserActivityManager;
 @Service
 public class UserManagerImpl implements UserManager {
 
+	private static final Logger logger = LoggerFactory.getLogger(UserManagerImpl.class);
 	@Resource
 	UserRepository userRepository;
 	
@@ -42,7 +45,7 @@ public class UserManagerImpl implements UserManager {
 		try {
 			user = userRepository.findUserById(userId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in findUserById for userId:- {}", userId, e);
 			throw new Exception();
 		}
 		return user;
@@ -53,7 +56,7 @@ public class UserManagerImpl implements UserManager {
 		try {
 			userRepository.saveUser(user);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in saveUser for userId:- {}", user.getUserId(), e);
 			throw new Exception();
 		}
 	}

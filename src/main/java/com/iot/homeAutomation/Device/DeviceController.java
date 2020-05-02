@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -19,6 +21,7 @@ import com.iot.homeAutomation.Util.Response;
 @RestController
 public class DeviceController {
 	
+	private static final Logger logger = LoggerFactory.getLogger(DeviceController.class);
 	@Resource
 	DeviceManager deviceManager;
 
@@ -30,7 +33,7 @@ public class DeviceController {
 			response = new Response<DeviceDTO>("200", "Success", device);
 		} catch (Exception e) {
 			response = new Response<DeviceDTO>("500", "Failed", null);
-			e.printStackTrace();
+			logger.error("Error in addDevice:- {}", e);
 		}
 		return response;
 	}

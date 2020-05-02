@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -17,6 +19,8 @@ import com.iot.homeAutomation.Device.DTO.WaterConfigDTO;
 @Service
 public class DeviceRepositoryImpl implements DeviceRepository {
 
+	private static final Logger logger = LoggerFactory.getLogger(DeviceRepositoryImpl.class);
+	
 	@Resource
 	MongoOperations mongoOperations;
 
@@ -25,9 +29,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		DeviceDTO device = new DeviceDTO();
 		try {
 			device = mongoOperations.save(new DeviceDTO());
-			System.out.println("Device saved in DB with Id:- " + device.getId());
+			logger.debug("Device saved in DB with Id:- {}", device.getId());
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in addDevice:- {}", e);
 			throw new Exception();
 		}
 		return device;
@@ -39,9 +43,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 			Query query = new Query(Criteria.where("id").is(device.getId()));
 			Update updateQuery = new Update().set("name", device.getName());
 			mongoOperations.updateFirst(query, updateQuery, DeviceDTO.class);
-			System.out.println("Device name updated to:- " + device.getName() + " for deviceId:- " + device.getId());
+			logger.debug("Device name updated to:- {} for deviceId:- {}", device.getName(), device.getId());
 		} catch (Exception e) {
-			System.out.println("Device name update failed for deviceId:- " + device.getId());
+			logger.debug("Device name update failed for deviceId:- {}", device.getId());
 			throw new Exception();
 		}
 	}
@@ -52,9 +56,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		try {
 			Query query = new Query(Criteria.where("id").is(deviceId));
 			device = mongoOperations.findOne(query, DeviceDTO.class);
-			System.out.println("Fetched device from DB for deviceId:- " + deviceId);
+			logger.debug("Fetched device from DB for deviceId:- {}", deviceId);
 		} catch (Exception e) {
-			System.out.println("Error in finding device from DB for deviceId:- " + deviceId);
+			logger.debug("Error in finding device from DB for deviceId:- {}", deviceId);
 			throw new Exception();
 		}
 		return device;
@@ -66,9 +70,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 		try {
 			Query query = new Query(Criteria.where("id").in(deviceIdList));
 			deviceList = mongoOperations.find(query, DeviceDTO.class);
-			System.out.println("Fetched devices from DB for deviceId in:- " + deviceIdList.toArray().toString());
+			logger.debug("Fetched devices from DB for deviceId in:- {}", deviceIdList.toArray().toString());
 		} catch (Exception e) {
-			System.out.println("Error in fetching device from DB for deviceID in:- " + deviceIdList.toArray().toString());
+			logger.debug("Error in fetching device from DB for deviceID in:- {}", deviceIdList.toArray().toString());
 			throw new Exception();
 		}
 		return deviceList;
@@ -78,9 +82,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 	public void saveDevice(DeviceDTO device) throws Exception {
 		try {
 			mongoOperations.save(device);
-			System.out.println("device saveed in DB for deviceId:- " + device.getId());
+			logger.debug("Device saved in DB for deviceId:- {}", device.getId());
 		} catch (Exception e) {
-			System.out.println("Error saving device in DB for deviceId:- " + device.getId());
+			logger.debug("Error saving device in DB for deviceId:- {}", device.getId());
 			throw new Exception();
 		}
 	}
@@ -91,9 +95,9 @@ public class DeviceRepositoryImpl implements DeviceRepository {
 			Query query = new Query(Criteria.where("id").is(deviceId));
 			Update updateQuery = new Update().set("waterConfig", waterConfig);
 			mongoOperations.updateFirst(query, updateQuery, DeviceDTO.class);
-			System.out.println("Water config updated for deviceId:- " + deviceId);
+			logger.debug("Water config updated for deviceId:- {}", deviceId);
 		} catch (Exception e) {
-			System.out.println("Error updating water config for deviceId:- " + deviceId);
+			logger.debug("Error updating water config for deviceId:- {}", deviceId);
 			throw new Exception();
 		}
 	}

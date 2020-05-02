@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -47,6 +49,8 @@ public class DeviceManagerImpl implements DeviceManager {
 	
 	@Resource
 	MQTTTopics mqttTopics;
+	
+	private static final Logger logger = LoggerFactory.getLogger(DeviceManagerImpl.class);
 
 	@Override
 	public DeviceDTO addDevice() throws Exception {
@@ -56,7 +60,7 @@ public class DeviceManagerImpl implements DeviceManager {
 			DeviceActivityDTO deviceActivity = new DeviceActivityDTO(device.getId(), null, "DEVICE_CREATED", ZonedDateTime.now().toString(), null);
 			deviceActivityManager.saveDeviceActivity(deviceActivity);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in addDevice:- {}", e);
 			throw new Exception();
 		}
 		return device;
@@ -69,7 +73,7 @@ public class DeviceManagerImpl implements DeviceManager {
 			DeviceActivityDTO deviceActivity = new DeviceActivityDTO(device.getId(), device.getName(), DeviceAction.NAME_EDITED.toString(), ZonedDateTime.now().toString(), userId);
 			deviceActivityManager.saveDeviceActivity(deviceActivity);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in saveDeviceName for deviceId:- {} and userId:- {}", device.getId(), userId, e);
 			throw new Exception();
 		}
 	}
@@ -80,7 +84,7 @@ public class DeviceManagerImpl implements DeviceManager {
 		try {
 			device = deviceRepository.findDeviceById(deviceId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in findDeviceById for deviceId:- {}", deviceId, e);
 			throw new Exception();
 		}
 		return device;
@@ -93,7 +97,7 @@ public class DeviceManagerImpl implements DeviceManager {
 			List<String> deviceIdList = userManager.findDeviceIdListByUserId(userId);
 			deviceList = deviceRepository.findDeviceByIdList(deviceIdList);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in findAllDeviceByUserId for userId:- {}", userId, e);
 			throw new Exception();
 		}
 		return deviceList;
@@ -105,7 +109,7 @@ public class DeviceManagerImpl implements DeviceManager {
 		try {
 			deviceRepository.saveDevice(device);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in saveDevice for deviceId:- {}", device.getId(), e);
 			throw new Exception();
 		}
 	}
@@ -125,7 +129,7 @@ public class DeviceManagerImpl implements DeviceManager {
 				userActivityManager.saveUserActivity(userActivity );
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in saveWaterConfig for deviceId:- {} and userId:- {}", deviceId, userId, e);
 			throw new Exception();
 		}
 	}
@@ -139,9 +143,9 @@ public class DeviceManagerImpl implements DeviceManager {
 			if(!ObjectUtils.isEmpty(device) && !ObjectUtils.isEmpty(device.getAdminList())) {
 				isAdmin = device.getAdminList().contains(userId);
 			}
-			System.out.println("User with userID:- " + userId + " has Admin:- " + isAdmin + " for deviceId:- " + deviceId);
+			logger.debug("User with userId:- {} has Admin Role:- {} for deviceId:- {}", userId, isAdmin, deviceId);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in checkUserIsAdmin for userId:- {} and deviceId:- {}", userId, deviceId, e);
 			throw new Exception();
 		}
 		return isAdmin;

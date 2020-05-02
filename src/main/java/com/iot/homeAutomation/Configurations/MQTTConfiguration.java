@@ -7,6 +7,8 @@ import org.eclipse.paho.client.mqttv3.MqttAsyncClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -16,16 +18,18 @@ import com.iot.homeAutomation.MQTT.MQTTStreamManager;
 @Configuration
 public class MQTTConfiguration {
 	
+	private static final Logger logger = LoggerFactory.getLogger(MQTTConfiguration.class);
+	
 	@Resource
 	MQTTStreamManager mqttStreamManager;
 
 	@Bean
 	public IMqttAsyncClient mqttClient() throws MqttException, InterruptedException {
 		IMqttAsyncClient client = new MqttAsyncClient(getServerURI() , "HOME_AUTOMATION_BACKEND", new MemoryPersistence());
-		System.out.println("Connecting to broker:- " + getServerURI());
+		logger.debug("Connecting to broker:- {}", getServerURI());
 		client.connect(getOptions()).waitForCompletion();
 		if(client.isConnected()) {
-			System.out.println("Connected to broker:- " + getServerURI());
+			logger.debug("Connected to broker:- {}", getServerURI());
 		}
 		return client;
 	}
@@ -37,10 +41,10 @@ public class MQTTConfiguration {
 			if(mqttClient().isConnected()) {
 				mqttStreamManager.subscribe();
 			}else {
-				System.out.println("Unable to subscribe to MQTT topics since the client is not connected to the server");
+				logger.debug("Unable to subscribe to MQTT topics since the client is not connected to the server");
 			}
 		} catch (MqttException | InterruptedException e) {
-			e.printStackTrace();
+			logger.error("Error in subscribing to MQTT topics:- ", e);
 		}
 	}
 	

@@ -2,6 +2,8 @@ package com.iot.homeAutomation.User;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,6 +15,8 @@ import com.iot.homeAutomation.Util.Response;
 @RestController
 public class UserController {
 
+	private static final Logger logger = LoggerFactory.getLogger(UserController.class);
+	
 	@Resource
 	UserManager userManager;
 
@@ -24,7 +28,7 @@ public class UserController {
 			isUserAdded = userManager.checkAndAddUser(user);
 			reponse = new Response<Boolean>("200", "Success", isUserAdded);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in checkAndAddUser for userId:- {}", user.getUserId(), e);
 			reponse = new Response<Boolean>("500", "Failed", null);
 		}
 

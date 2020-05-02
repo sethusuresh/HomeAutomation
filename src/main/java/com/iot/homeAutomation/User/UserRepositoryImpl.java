@@ -2,6 +2,8 @@ package com.iot.homeAutomation.User;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -13,6 +15,8 @@ import com.iot.homeAutomation.User.DTO.UserDTO;
 @Service
 public class UserRepositoryImpl implements UserRepository {
 
+	private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
+	
 	@Resource
 	MongoOperations mongoOperations;
 
@@ -24,13 +28,13 @@ public class UserRepositoryImpl implements UserRepository {
 			UserDTO userDTO = mongoOperations.findOne(query, UserDTO.class);
 			if (ObjectUtils.isEmpty(userDTO)) {
 				mongoOperations.save(user);
-				System.out.println("New user saved in DB for userId:- " + user.getUserId());
+				logger.debug("New user saved in DB for userId:- {}", user.getUserId());
 				lReturn = true;
 			} else {
-				System.out.println("User already present in DB for userId:- " + user.getUserId());
+				logger.debug("User already present in DB for userId:- {}", user.getUserId());
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error in checkAndAddUser for userId:- {}", user.getUserId(), e);
 			throw new Exception();
 		}
 		return lReturn;
@@ -42,9 +46,9 @@ public class UserRepositoryImpl implements UserRepository {
 		try {
 			Query query = new Query(Criteria.where("userId").is(userId));
 			user = mongoOperations.findOne(query, UserDTO.class);
-			System.out.println("User fetched from DB for userId:- " + userId);
+			logger.debug("User fetched from DB for userId:- {}", userId);
 		} catch (Exception e) {
-			System.out.println("Error finding user from DB for user Id:- " + userId);
+			logger.debug("Error finding user from DB for user Id:- {}", userId);
 			throw new Exception();
 		}
 		return user;
@@ -54,9 +58,9 @@ public class UserRepositoryImpl implements UserRepository {
 	public void saveUser(UserDTO user) throws Exception {
 		try {
 			mongoOperations.save(user);
-			System.out.println("User save in DB for userId:- " + user.getUserId());
+			logger.debug("User save in DB for userId:- {}", user.getUserId());
 		} catch (Exception e) {
-			System.out.println("Error saving user to DB for userId:- " + user.getUserId());
+			logger.debug("Error saving user to DB for userId:- {}", user.getUserId());
 			throw new Exception();
 		}
 	}
