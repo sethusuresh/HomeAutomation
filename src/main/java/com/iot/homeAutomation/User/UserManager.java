@@ -5,7 +5,7 @@ import java.util.List;
 import com.iot.homeAutomation.User.DTO.UserDTO;
 
 public interface UserManager {
-
+//test
 	public boolean checkAndAddUser(UserDTO user) throws Exception;
 
 	UserDTO findUserById(String userId) throws Exception;
