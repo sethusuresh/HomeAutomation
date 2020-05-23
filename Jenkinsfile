@@ -1,7 +1,14 @@
 pipeline {
     agent any
     stages {
-        stage('Build') {
+	stage('Test') {
+            steps {
+		    script{
+			    echo "Hellow world"
+		    }
+            }
+        } 
+        /*stage('Build') {
             steps {
             	dir("/var/lib/jenkins/workspace/Home_Automation"){
 	                echo "Gradle build started"
@@ -40,6 +47,6 @@ pipeline {
             	    deleteDir()
             	}
             }
-        }
+        }*/
     }
 }
