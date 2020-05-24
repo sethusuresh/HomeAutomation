@@ -6,7 +6,7 @@ import com.iot.homeAutomation.Device.DTO.DeviceDTO;
 import com.iot.homeAutomation.Device.DTO.WaterConfigDTO;
 
 public interface DeviceManager {
-
+//testing
 	public DeviceDTO addDevice() throws Exception;
 
 	void saveDeviceName(DeviceDTO device, String userId) throws Exception;
