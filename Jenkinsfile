@@ -8,14 +8,6 @@ remote.password = "SS1994ekm@"
 pipeline {
     agent any
     stages {
-		stage('Test') {
-            steps {
-			    script{
-				    echo "Hellow world test    "
-				    echo "the workspace is:- ${WORKSPACE}"
-			    }
-            }
-        } 
         stage('Build') {
             steps {
             	dir("${WORKSPACE}"){
@@ -28,7 +20,7 @@ pipeline {
         stage('testting'){
         	steps{
 				    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
-				            //sshCommand remote: remote, command: 'sudo ls -lrt'
+				            sshCommand remote: remote, command: 'ls -lrt'
 				            sshCommand remote: remote, command: 'pwd'
 				        /*stage("SSH Steps Rocks!") {
 				            //writeFile file: 'test.sh', text: 'ls'
