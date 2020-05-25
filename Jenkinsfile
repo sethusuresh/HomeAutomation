@@ -1,3 +1,10 @@
+def remote = [:]
+remote.name = "raspberrypi"
+remote.host = "ssautohome.hopto.org/"
+remote.allowAnyHosts = true
+remote.user = "jenkins"
+remote.password = "SS1994ekm@"
+
 pipeline {
     agent any
     stages {
@@ -19,12 +26,6 @@ pipeline {
             }
         }
         stage('testting'){
-					    def remote = [:]
-						remote.name = "raspberrypi"
-						remote.host = "ssautohome.hopto.org/"
-						remote.allowAnyHosts = true
-				        remote.user = "jenkins"
-				        remote.password = "SS1994ekm@"
         	steps{
 	            node {
 				    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
