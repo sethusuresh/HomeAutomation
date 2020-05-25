@@ -27,7 +27,6 @@ pipeline {
         }
         stage('testting'){
         	steps{
-	            node {
 				    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
 				            sshCommand remote: remote, command: 'ls -lrt'
 				        /*stage("SSH Steps Rocks!") {
@@ -38,7 +37,8 @@ pipeline {
 				            //sshRemove remote: remote, path: 'test.sh'
 				        }*/
 				    }
-				}
+	            //node {
+				//}
         	}
         }
         /*stage('Copying JAR') {
