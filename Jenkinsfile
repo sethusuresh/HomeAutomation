@@ -17,26 +17,37 @@ pipeline {
             	}
             }
         }
+        stage('Copying JAR') {
+            steps {
+            	withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
+		            //sshCommand remote: remote, command: 'ls -lrt'
+		            sshCommand remote: remote, command: 'pwd'
+		            //writeFile file: 'test.sh', text: 'ls'
+		            //sshScript remote: remote, script: 'test.sh'
+		            //sshPut remote: remote, from: 'test.sh', into: '.'
+		            sshGet remote: remote, from: 'build/libs/homeAutomation.jar', into: '.', override: true
+		            //sshRemove remote: remote, path: 'test.sh'
+			    }
+            }
+        }
         stage('testting'){
         	steps{
-				    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
-				            sshCommand remote: remote, command: 'ls -lrt'
-				            sshCommand remote: remote, command: 'pwd'
-				        /*stage("SSH Steps Rocks!") {
-				            //writeFile file: 'test.sh', text: 'ls'
-				            //sshScript remote: remote, script: 'test.sh'
-				            //sshPut remote: remote, from: 'test.sh', into: '.'
-				            //sshGet remote: remote, from: 'test.sh', into: 'test_new.sh', override: true
-				            //sshRemove remote: remote, path: 'test.sh'
-				        }*/
-				    }
-	            //node {
-				//}
+			    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
+			            sshCommand remote: remote, command: 'ls -lrt'
+			            sshCommand remote: remote, command: 'pwd'
+			        /*stage("SSH Steps Rocks!") {
+			            //writeFile file: 'test.sh', text: 'ls'
+			            //sshScript remote: remote, script: 'test.sh'
+			            //sshPut remote: remote, from: 'test.sh', into: '.'
+			            //sshGet remote: remote, from: 'test.sh', into: 'test_new.sh', override: true
+			            //sshRemove remote: remote, path: 'test.sh'
+			        }*/
+			    }
         	}
         }
         /*stage('Copying JAR') {
             steps {
-            	dir("/var/lib/jenkins/workspace/Home_Automation/build/libs"){
+            	dir("${WORKSPACE}/build/libs"){
 	            	fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: 'homeAutomation.jar', renameFiles: false, sourceCaptureExpression: '', targetLocation: '/jar/home_automation', targetNameExpression: '')])
             	}
             }
