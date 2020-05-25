@@ -9,16 +9,16 @@ pipeline {
 				    }
 	            }
 	        } 
-        /*stage('Build') {
+        stage('Build') {
             steps {
-            	dir("/var/lib/jenkins/workspace/Home_Automation"){
+            	dir("${WORKSPACE}"){
 	                echo "Gradle build started"
 	                sh "gradle build"
 	                echo "Gradle build completed"
             	}
             }
         }
-        stage('Copying JAR') {
+        /*stage('Copying JAR') {
             steps {
             	dir("/var/lib/jenkins/workspace/Home_Automation/build/libs"){
 	            	fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: 'homeAutomation.jar', renameFiles: false, sourceCaptureExpression: '', targetLocation: '/jar/home_automation', targetNameExpression: '')])
