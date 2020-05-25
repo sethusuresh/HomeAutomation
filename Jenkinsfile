@@ -19,25 +19,22 @@ pipeline {
         }
         stage('Copying JAR') {
             steps {
-            	withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
-		            //sshCommand remote: remote, command: 'ls -lrt'
-		            sshCommand remote: remote, command: 'pwd'
-		            //writeFile file: 'test.sh', text: 'ls'
-		            //sshScript remote: remote, script: 'test.sh'
+            	echo "Copying JAR started"
+            	withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+            		echo $PASSWORD
 		            sshPut remote: remote, from: 'build/libs/homeAutomation.jar', into: './jar/'
-		            //sshGet remote: remote, from: 'build/libs/homeAutomation.jar', into: '.', override: true
-		            //sshRemove remote: remote, path: 'test.sh'
 			    }
+			    echo "Copying JAR completed"
             }
         }
-        stage('testting'){
+        stage('Deploy'){
         	steps{
-			    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
-			            sshCommand remote: remote, command: 'ls -lrt'
-			            sshCommand remote: remote, command: 'pwd'
+			    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+			            sshPut remote: remote, from: 'Dockerfile', into: '.'
+			            sshScript remote: remote, script: 'docker build /home/jenkins -t home_automation'
+			            sshScript remote: remote, script: 'docker run --name home_automation -p 9090:9090 -d home_automation'
 			        /*stage("SSH Steps Rocks!") {
 			            //writeFile file: 'test.sh', text: 'ls'
-			            //sshScript remote: remote, script: 'test.sh'
 			            //sshPut remote: remote, from: 'test.sh', into: '.'
 			            //sshGet remote: remote, from: 'test.sh', into: 'test_new.sh', override: true
 			            //sshRemove remote: remote, path: 'test.sh'
@@ -45,26 +42,7 @@ pipeline {
 			    }
         	}
         }
-        /*stage('Copying JAR') {
-            steps {
-            	dir("${WORKSPACE}/build/libs"){
-	            	fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: 'homeAutomation.jar', renameFiles: false, sourceCaptureExpression: '', targetLocation: '/jar/home_automation', targetNameExpression: '')])
-            	}
-            }
-        }
-        stage('Deploy') {
-            steps {
-            	dir("/jar/home_automation"){
-            		script{
-            			echo "kill application running in port 9090"
-            			sh 'kill -9 $(lsof -t -i:9090) || true'
-        				echo "Starting java application deployment"
-                		sh 'JENKINS_NODE_COOKIE=dontKillMe nohup java -jar homeAutomation.jar &'
-                		echo "Java application deployment completed"
-            		}
-            	}
-            }
-        }
+        /*
         stage('Workspace cleanup') {
             steps {
             	cleanWs notFailBuild: true
