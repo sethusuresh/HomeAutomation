@@ -2,9 +2,6 @@ def remote = [:]
 remote.name = "raspberrypi"
 remote.host = "ssautohome.hopto.org"
 remote.allowAnyHosts = true
-remote.user = "jenkins"
-remote.password = "SS1994ekm@"
-
 pipeline {
     agent any
     stages {
@@ -21,7 +18,6 @@ pipeline {
             steps {
             	echo "Copying JAR started"
             	withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-            		echo "$USERNAME"
             		script{
 	            		remote.user = "$USERNAME"
 						remote.password = "$PASSWORD"
@@ -34,6 +30,10 @@ pipeline {
         stage('Deploy'){
         	steps{
 			    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+			    		script{
+			    		    remote.user = "$USERNAME"
+							remote.password = "$PASSWORD"
+			    		}
 			            sshPut remote: remote, from: 'Dockerfile', into: '.'
 			            sshScript remote: remote, script: 'docker build /home/jenkins -t home_automation'
 			            sshScript remote: remote, script: 'docker run --name home_automation -p 9090:9090 -d home_automation'
