@@ -19,15 +19,15 @@ pipeline {
             }
         }
         stage('testting'){
-        	steps{
-	            node {
-				    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
 					    def remote = [:]
 						remote.name = "raspberrypi"
 						remote.host = "ssautohome.hopto.org/"
 						remote.allowAnyHosts = true
 				        remote.user = "jenkins"
 				        remote.password = "SS1994ekm@"
+        	steps{
+	            node {
+				    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
 				            sshCommand remote: remote, command: 'ls -lrt'
 				        /*stage("SSH Steps Rocks!") {
 				            //writeFile file: 'test.sh', text: 'ls'
