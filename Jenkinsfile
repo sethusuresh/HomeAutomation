@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    /*agent any
     stages {
 		stage('Test') {
             steps {
@@ -18,7 +18,7 @@ pipeline {
             	}
             }
         }
-   	}
+   	}*/
    	node {
 	    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
 		    def remote = [:]
