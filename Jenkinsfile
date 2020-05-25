@@ -2,13 +2,13 @@ pipeline {
     agent any
     stages {
 		stage('Test') {
-	            steps {
-				    script{
-					    echo "Hellow world test    "
-					    echo "the workspace is:- ${WORKSPACE}"
-				    }
-	            }
-	        } 
+            steps {
+			    script{
+				    echo "Hellow world test    "
+				    echo "the workspace is:- ${WORKSPACE}"
+			    }
+            }
+        } 
         stage('Build') {
             steps {
             	dir("${WORKSPACE}"){
@@ -18,6 +18,25 @@ pipeline {
             	}
             }
         }
+   	}
+   	node {
+	    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
+		    def remote = [:]
+			remote.name = "raspberrypi"
+			remote.host = "ssautohome.hopto.org/"
+			remote.allowAnyHosts = true
+	        remote.user = "jenkins"
+	        remote.password = "SS1994ekm@"
+	        stage("SSH Steps Rocks!") {
+	            //writeFile file: 'test.sh', text: 'ls'
+	            sshCommand remote: remote, command: 'ls -lrt'
+	            //sshScript remote: remote, script: 'test.sh'
+	            //sshPut remote: remote, from: 'test.sh', into: '.'
+	            //sshGet remote: remote, from: 'test.sh', into: 'test_new.sh', override: true
+	            //sshRemove remote: remote, path: 'test.sh'
+	        }
+	    }
+	}
         /*stage('Copying JAR') {
             steps {
             	dir("/var/lib/jenkins/workspace/Home_Automation/build/libs"){
@@ -49,5 +68,4 @@ pipeline {
             	}
             }
         }*/
-    }
 }
