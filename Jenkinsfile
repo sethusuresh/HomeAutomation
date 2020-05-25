@@ -28,7 +28,7 @@ pipeline {
         stage('testting'){
         	steps{
 				    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: '', usernameVariable: '')]) {
-				            sshCommand remote: remote, command: 'ls -lrt'
+				            sshCommand remote: remote, command: 'sudo ls -lrt'
 				        /*stage("SSH Steps Rocks!") {
 				            //writeFile file: 'test.sh', text: 'ls'
 				            //sshScript remote: remote, script: 'test.sh'
