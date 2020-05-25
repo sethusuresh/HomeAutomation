@@ -24,7 +24,7 @@ pipeline {
 		            sshCommand remote: remote, command: 'pwd'
 		            //writeFile file: 'test.sh', text: 'ls'
 		            //sshScript remote: remote, script: 'test.sh'
-		            sshPut remote: remote, from: 'build/libs/homeAutomation.jar', into: '.'
+		            sshPut remote: remote, from: 'build/libs/homeAutomation.jar', into: './jar'
 		            //sshGet remote: remote, from: 'build/libs/homeAutomation.jar', into: '.', override: true
 		            //sshRemove remote: remote, path: 'test.sh'
 			    }
