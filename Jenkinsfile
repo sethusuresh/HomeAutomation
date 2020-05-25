@@ -1,14 +1,14 @@
 pipeline {
     agent any
     stages {
-	stage('Test') {
-            steps {
-		    script{
-			    echo "Hellow world test    "
-		    }
-            }
-        } 
-        /*stage('Build') {
+		stage('Test') {
+	            steps {
+				    script{
+					    echo "Hellow world test    "
+				    }
+	            }
+	        } 
+        stage('Build') {
             steps {
             	dir("/var/lib/jenkins/workspace/Home_Automation"){
 	                echo "Gradle build started"
@@ -17,7 +17,7 @@ pipeline {
             	}
             }
         }
-        stage('Copying JAR') {
+        /*stage('Copying JAR') {
             steps {
             	dir("/var/lib/jenkins/workspace/Home_Automation/build/libs"){
 	            	fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: 'homeAutomation.jar', renameFiles: false, sourceCaptureExpression: '', targetLocation: '/jar/home_automation', targetNameExpression: '')])
