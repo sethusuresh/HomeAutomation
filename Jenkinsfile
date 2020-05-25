@@ -27,14 +27,14 @@ pipeline {
 					remote.allowAnyHosts = true
 			        remote.user = "jenkins"
 			        remote.password = "SS1994ekm@"
-			        stage("SSH Steps Rocks!") {
-			            //writeFile file: 'test.sh', text: 'ls'
 			            sshCommand remote: remote, command: 'ls -lrt'
+			        /*stage("SSH Steps Rocks!") {
+			            //writeFile file: 'test.sh', text: 'ls'
 			            //sshScript remote: remote, script: 'test.sh'
 			            //sshPut remote: remote, from: 'test.sh', into: '.'
 			            //sshGet remote: remote, from: 'test.sh', into: 'test_new.sh', override: true
 			            //sshRemove remote: remote, path: 'test.sh'
-			        }
+			        }*/
 			    }
 			}
         }
