@@ -1,6 +1,6 @@
 def remote = [:]
 remote.name = "raspberrypi"
-remote.host = "ssautohome.hopto.org/"
+remote.host = "ssautohome.hopto.org"
 remote.allowAnyHosts = true
 remote.user = "jenkins"
 remote.password = "SS1994ekm@"
