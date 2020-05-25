@@ -22,6 +22,8 @@ pipeline {
             	echo "Copying JAR started"
             	withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
             		echo "$USERNAME"
+            		remote.user = "$USERNAME"
+					remote.password = "$PASSWORD"
 		            sshPut remote: remote, from: 'build/libs/homeAutomation.jar', into: './jar/'
 			    }
 			    echo "Copying JAR completed"
