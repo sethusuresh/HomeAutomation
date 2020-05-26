@@ -35,8 +35,8 @@ pipeline {
 							remote.password = "$PASSWORD"
 			    		}
 			            sshPut remote: remote, from: 'Dockerfile', into: '.'
-			            sshScript remote: remote, script: 'docker build /home/jenkins -t home_automation'
-			            sshScript remote: remote, script: 'docker run --name home_automation -p 9090:9090 -d home_automation'
+			            //sshScript remote: remote, script: 'docker build /home/jenkins -t home_automation'
+			            //sshScript remote: remote, script: 'docker run --name home_automation -p 9090:9090 -d home_automation'
 			        /*stage("SSH Steps Rocks!") {
 			            //writeFile file: 'test.sh', text: 'ls'
 			            //sshPut remote: remote, from: 'test.sh', into: '.'
