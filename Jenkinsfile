@@ -23,8 +23,8 @@ pipeline {
             	echo "**********Fetching Credentials**********"
             	withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'RPI_PASSWORD', usernameVariable: 'RPI_USERNAME')]) {
             		script{
-	            		remote.user = "$USERNAME"
-						remote.password = "$PASSWORD"
+	            		remote.user = "$RPI_USERNAME"
+						remote.password = "$RPI_PASSWORD"
             		}
 			    }
 			    echo "Setting Rpi SSH credentials completed"
