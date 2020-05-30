@@ -35,15 +35,10 @@ pipeline {
 							remote.password = "$PASSWORD"
 			    		}
 			            sshPut remote: remote, from: 'Dockerfile', into: '.'
-			            //sshCommand remote: remote, command: 'pwd'
 			            sshCommand remote: remote, command: 'docker build /home/jenkins -t home_automation'
+			            sshCommand remote: remote, command: 'docker stop home_automation'
+			            sshCommand remote: remote, command: 'docker rm home_automation'
 			            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d home_automation'
-			        /*stage("SSH Steps Rocks!") {
-			            //writeFile file: 'test.sh', text: 'ls'
-			            //sshPut remote: remote, from: 'test.sh', into: '.'
-			            //sshGet remote: remote, from: 'test.sh', into: 'test_new.sh', override: true
-			            //sshRemove remote: remote, path: 'test.sh'
-			        }*/
 			    }
         	}
         }
