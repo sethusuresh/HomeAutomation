@@ -15,7 +15,6 @@ pipeline {
 	                echo "Gradle build started"
 	                sh "gradle build -x test"
 	                echo "Gradle build completed"
-	                echo "GIT_COMMIT is ${env.GIT_COMMIT}"
             	}
             }
         }
@@ -62,7 +61,7 @@ pipeline {
             	echo "Logging into DockerHub"
 	            sshCommand remote: remote, command: "docker login -u ${dockerUsername} -p ${dockerPassword}"
 	            echo "Pushing latest image to DockerHub"
-	            sshCommand remote: remote, command: 'docker push sethusuresh/home_automation'
+	            sshCommand remote: remote, command: "docker push sethusuresh/home_automation:${env.GIT_COMMIT}"
 	            echo "Logging out from DockerHub"
 	            sshCommand remote: remote, command: 'docker logout'
         	}
