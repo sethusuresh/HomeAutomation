@@ -62,13 +62,18 @@ pipeline {
 			            sshCommand remote: remote, command: "docker rmi ${oldImageId}"
                   	}
 	            }
+        	}
+        }
+        stage('Pushing Image to DockerHub') {
+            steps {
+            	echo "**********Pushing Image to DockerHub**********"
             	echo "Logging into DockerHub"
 	            sshCommand remote: remote, command: "docker login -u ${dockerUsername} -p ${dockerPassword}"
 	            echo "Pushing latest image to DockerHub"
 	            sshCommand remote: remote, command: 'docker push sethusuresh/home_automation'
 	            echo "Logging out from DockerHub"
 	            sshCommand remote: remote, command: 'docker logout'
-        	}
+            }
         }
         stage('Deploy') {
             steps {

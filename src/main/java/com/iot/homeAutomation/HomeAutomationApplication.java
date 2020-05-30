@@ -21,7 +21,7 @@ public class HomeAutomationApplication {
 	@RequestMapping(value = "/keepalive", method = RequestMethod.GET)
 	public String health() {
 		logger.debug("keepalive");
-		return "OK 2";
+		return "OK";
 	}
 
 }
