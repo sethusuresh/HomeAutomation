@@ -42,8 +42,8 @@ pipeline {
 				            value = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true"'
 				            //echo "value"
 				            //echo value
+				            sshCommand remote: remote, command: 'docker rmi ${value}'
 			            }
-			            sshCommand remote: remote, command: 'docker rmi ${value}'
 			            sshCommand remote: remote, command: 'docker stop home_automation'
 			            sshCommand remote: remote, command: 'docker rm home_automation'
 			            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d home_automation'
