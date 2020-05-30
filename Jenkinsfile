@@ -2,6 +2,7 @@ def remote = [:]
 remote.name = "raspberrypi"
 remote.host = "ssautohome.hopto.org"
 remote.allowAnyHosts = true
+def value
 pipeline {
     agent any
     stages {
@@ -37,7 +38,7 @@ pipeline {
 			            sshPut remote: remote, from: 'Dockerfile', into: '.'
 			            sshCommand remote: remote, command: 'docker build /home/jenkins -t home_automation'
 			            //sshCommand remote: remote, command: 'docker rmi $(docker images -qa -f "dangling=true")'
-			            def value = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true"'
+			            value = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true"'
 			            sshCommand remote: remote, command: 'docker stop home_automation'
 			            sshCommand remote: remote, command: 'docker rm home_automation'
 			            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d home_automation'
