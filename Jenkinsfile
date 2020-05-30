@@ -6,8 +6,9 @@ def oldImageId = ""
 pipeline {
     agent any
     stages {
-        stage('*****************Build*****************') {
+        stage('Build') {
             steps {
+            	echo "*****************Build*****************"
             	dir("${WORKSPACE}"){
 	                echo "Gradle build started"
 	                sh "gradle build -x test"
@@ -15,8 +16,9 @@ pipeline {
             	}
             }
         }
-        stage('**********Copying JAR To Server**********') {
+        stage('Copying JAR To Server') {
             steps {
+            	echo "**********Copying JAR To Server**********"
             	echo "Copying JAR started"
             	withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
             		script{
@@ -28,23 +30,30 @@ pipeline {
 			    echo "Copying JAR completed"
             }
         }
-        stage('*****************Deploy*****************'){
+        stage('Deploy'){
         	steps{
+        		echo "*****************Deploy*****************"
 			    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
 			    		script{
 			    		    remote.user = "$USERNAME"
 							remote.password = "$PASSWORD"
 			    		}
+			    		echo "Copying Dockerfile"
 			            sshPut remote: remote, from: 'Dockerfile', into: '.'
+			            echo "Building docker image"
 			            sshCommand remote: remote, command: 'docker build /home/jenkins -t sethusuresh/home_automation'
+			            echo "Stopping the old container"
 			            sshCommand remote: remote, command: 'docker stop home_automation || true'
+			            echo "Removing the old container"
 			            sshCommand remote: remote, command: 'docker rm home_automation || true'
 			            script{
 				            oldImageId = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true" || true'
 				            if(oldImageId != null && !oldImageId.trim().isEmpty()){
+				            	echo "Removing the old docker image:- ${oldImageId}"
 					            sshCommand remote: remote, command: "docker rmi ${oldImageId}"
                           	}
 			            }
+			            echo "Running docker container"
 			            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d sethusuresh/home_automation'
 			    }
         	}
