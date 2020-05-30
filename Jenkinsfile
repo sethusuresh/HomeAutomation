@@ -6,7 +6,7 @@ def oldImageId = ""
 pipeline {
     agent any
     stages {
-        stage('Build') {
+        stage('*****************Build*****************') {
             steps {
             	dir("${WORKSPACE}"){
 	                echo "Gradle build started"
@@ -15,7 +15,7 @@ pipeline {
             	}
             }
         }
-        stage('Copying JAR To Server') {
+        stage('**********Copying JAR To Server**********') {
             steps {
             	echo "Copying JAR started"
             	withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
@@ -28,7 +28,7 @@ pipeline {
 			    echo "Copying JAR completed"
             }
         }
-        stage('Deploy'){
+        stage('*****************Deploy*****************'){
         	steps{
 			    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
 			    		script{
@@ -37,11 +37,13 @@ pipeline {
 			    		}
 			            sshPut remote: remote, from: 'Dockerfile', into: '.'
 			            sshCommand remote: remote, command: 'docker build /home/jenkins -t sethusuresh/home_automation'
-			            sshCommand remote: remote, command: 'docker stop home_automation'
-			            sshCommand remote: remote, command: 'docker rm home_automation'
+			            sshCommand remote: remote, command: 'docker stop home_automation || true'
+			            sshCommand remote: remote, command: 'docker rm home_automation || true'
 			            script{
-				            oldImageId = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true" | true'
-				            sshCommand remote: remote, command: "docker rmi ${oldImageId}"
+				            oldImageId = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true" || true'
+				            if(oldImageId != null && !oldImageId.trim().isEmpty()){
+					            sshCommand remote: remote, command: "docker rmi ${oldImageId}"
+                          	}
 			            }
 			            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d sethusuresh/home_automation'
 			    }
