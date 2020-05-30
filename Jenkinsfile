@@ -29,7 +29,7 @@ pipeline {
             }
         }
         stage('Deploy'){
-        	steps{
+        	//steps{
 			    withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
 			    		script{
 			    		    remote.user = "$USERNAME"
@@ -43,7 +43,7 @@ pipeline {
 			            sshCommand remote: remote, command: 'docker rm home_automation'
 			            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d home_automation'
 			    }
-        	}
+        	//}
         }
         /*
         stage('Workspace cleanup') {
