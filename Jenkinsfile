@@ -2,7 +2,7 @@ def remote = [:]
 remote.name = "raspberrypi"
 remote.host = "ssautohome.hopto.org"
 remote.allowAnyHosts = true
-def value
+def value = ""
 pipeline {
     agent any
     stages {
