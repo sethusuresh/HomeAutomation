@@ -51,6 +51,10 @@ pipeline {
 	            sshPut remote: remote, from: 'Dockerfile', into: '.'
 	            echo "Building docker image"
 	            sshCommand remote: remote, command: 'docker build /home/jenkins -t sethusuresh/home_automation'
+	            echo "Stopping the old container"
+	            sshCommand remote: remote, command: 'docker stop home_automation || true'
+	            echo "Removing the old container"
+	            sshCommand remote: remote, command: 'docker rm home_automation || true'
 	            script{
 		            oldImageId = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true" || true'
 		            if(oldImageId != null && !oldImageId.trim().isEmpty()){
@@ -69,10 +73,6 @@ pipeline {
         stage('Deploy') {
             steps {
             	echo "**********Deploy**********"
-	            echo "Stopping the old container"
-	            sshCommand remote: remote, command: 'docker stop home_automation || true'
-	            echo "Removing the old container"
-	            sshCommand remote: remote, command: 'docker rm home_automation || true'
 	            echo "Starting the latest docker container"
 	            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d sethusuresh/home_automation'
             }
