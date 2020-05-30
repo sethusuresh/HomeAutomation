@@ -17,6 +17,7 @@ import com.iot.homeAutomation.MQTT.MQTTStreamManager;
 
 @Configuration
 public class MQTTConfiguration {
+	//testing
 	
 	private static final Logger logger = LoggerFactory.getLogger(MQTTConfiguration.class);
 	
