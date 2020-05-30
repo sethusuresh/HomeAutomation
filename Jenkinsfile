@@ -15,6 +15,7 @@ pipeline {
 	                echo "Gradle build started"
 	                sh "gradle build -x test"
 	                echo "Gradle build completed"
+	                echo "GIT_COMMIT is ${env.GIT_COMMIT}"
             	}
             }
         }
