@@ -2,7 +2,7 @@ def remote = [:]
 remote.name = "raspberrypi"
 remote.host = "ssautohome.hopto.org"
 remote.allowAnyHosts = true
-def value = ""
+def oldImageId = ""
 pipeline {
     agent any
     stages {
@@ -15,7 +15,7 @@ pipeline {
             	}
             }
         }
-        stage('Copying JAR To RaspberryPi Server') {
+        stage('Copying JAR To Server') {
             steps {
             	echo "Copying JAR started"
             	withCredentials([usernamePassword(credentialsId: 'Rpi-ssh-cred', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
@@ -36,16 +36,13 @@ pipeline {
 							remote.password = "$PASSWORD"
 			    		}
 			            sshPut remote: remote, from: 'Dockerfile', into: '.'
-			            sshCommand remote: remote, command: 'docker build /home/jenkins -t home_automation'
-			            script{
-				            //sshCommand remote: remote, command: 'docker images -qa -f "dangling=true"'
-				            value = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true"'
-				            //echo "value"
-				            //echo value
-				            sshCommand remote: remote, command: "docker rmi ${value}"
-			            }
+			            sshCommand remote: remote, command: 'docker build /home/jenkins -t sethusuresh/home_automation'
 			            sshCommand remote: remote, command: 'docker stop home_automation'
 			            sshCommand remote: remote, command: 'docker rm home_automation'
+			            script{
+				            oldImageId = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true"'
+				            sshCommand remote: remote, command: "docker rmi ${oldImageId}"
+			            }
 			            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d home_automation'
 			    }
         	}
