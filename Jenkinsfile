@@ -59,7 +59,7 @@ pipeline {
                   	}
 	            }
             	echo "Logging into DockerHub"
-	            sshCommand remote: remote, command: "docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}"
+	            sshCommand remote: remote, command: "docker login -u ${dockerUsername} -p ${dockerPassword}"
 	            echo "Pushing latest image to DockerHub"
 	            sshCommand remote: remote, command: 'docker push sethusuresh/home_automation'
 	            echo "Logging out from DockerHub"
