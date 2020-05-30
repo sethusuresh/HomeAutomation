@@ -40,7 +40,7 @@ pipeline {
 			            sshCommand remote: remote, command: 'docker stop home_automation'
 			            sshCommand remote: remote, command: 'docker rm home_automation'
 			            script{
-				            oldImageId = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true"'
+				            oldImageId = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true" | true'
 				            sshCommand remote: remote, command: "docker rmi ${oldImageId}"
 			            }
 			            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d sethusuresh/home_automation'
