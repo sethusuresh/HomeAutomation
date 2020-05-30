@@ -33,10 +33,11 @@ pipeline {
 			    		script{
 			    		    remote.user = "$USERNAME"
 							remote.password = "$PASSWORD"
+							def VALUE;
 			    		}
 			            sshPut remote: remote, from: 'Dockerfile', into: '.'
 			            sshCommand remote: remote, command: 'docker build /home/jenkins -t home_automation'
-			            //sshCommand remote: remote, command: 'docker rmi ${docker images -qa -f "dangling=true"}'
+			            sshCommand remote: remote, command: 'docker rmi $(docker images -qa -f "dangling=true")'
 			            sshCommand remote: remote, command: 'VALUE = $(docker images -qa -f "dangling=true")'
 			            sshCommand remote: remote, command: 'docker stop home_automation'
 			            sshCommand remote: remote, command: 'docker rm home_automation'
