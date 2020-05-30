@@ -82,11 +82,11 @@ pipeline {
 	            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d sethusuresh/home_automation'
             }
         }
-        post { 
-	        always { 
-	            cleanWs()
-	        }
-	    }
+    }
+    post { 
+        always { 
+            cleanWs()
+        }
     }
 }
 
