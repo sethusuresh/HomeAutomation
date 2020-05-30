@@ -39,6 +39,7 @@ pipeline {
 			            sshCommand remote: remote, command: 'docker build /home/jenkins -t home_automation'
 			            script{
 				            //sshCommand remote: remote, command: 'docker rmi $(docker images -qa -f "dangling=true")'
+				            sshCommand remote: remote, command: 'docker images -qa -f "dangling=true"'
 				            value = sshCommand remote: remote, command: 'docker images -qa -f "dangling=true"'
 				            echo "value"
 				            echo value
