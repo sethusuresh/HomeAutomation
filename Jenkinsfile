@@ -82,18 +82,11 @@ pipeline {
 	            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d sethusuresh/home_automation'
             }
         }
-        /*
-        stage('Workspace cleanup') {
-            steps {
-            	cleanWs notFailBuild: true
-            	dir("/var/lib/jenkins/workspace/Home_Automation@tmp"){
-            	    deleteDir()
-            	}
-            	dir("/jar/home_automation@tmp"){
-            	    deleteDir()
-            	}
-            }
-        } */
+        post { 
+	        always { 
+	            cleanWs()
+	        }
+	    }
     }
 }
 
