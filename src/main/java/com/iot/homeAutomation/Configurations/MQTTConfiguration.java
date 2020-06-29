@@ -42,6 +42,9 @@ public class MQTTConfiguration {
 				mqttStreamManager.subscribe();
 			}else {
 				logger.debug("Unable to subscribe to MQTT topics since the client is not connected to the server");
+				logger.debug("Retrying connection......");
+				mqttClient().connect(getOptions()).waitForCompletion();
+				mqttStreamManager.subscribe();
 			}
 		} catch (MqttException | InterruptedException e) {
 			logger.error("Error in subscribing to MQTT topics:- ", e);
