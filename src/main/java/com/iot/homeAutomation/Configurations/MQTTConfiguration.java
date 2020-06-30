@@ -11,7 +11,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 
 import com.iot.homeAutomation.MQTT.MQTTStreamManager;
 
@@ -26,15 +25,24 @@ public class MQTTConfiguration {
 	@Bean
 	public IMqttAsyncClient mqttClient() throws MqttException, InterruptedException {
 		IMqttAsyncClient client = new MqttAsyncClient(getServerURI() , "HOME_AUTOMATION_BACKEND", new MemoryPersistence());
-		logger.debug("Connecting to broker:- {}", getServerURI());
-		client.connect(getOptions()).waitForCompletion();
-		if(client.isConnected()) {
-			logger.debug("Connected to broker:- {}", getServerURI());
+		try {
+			logger.debug("Connecting to broker:- {}", getServerURI());
+			client.connect(getOptions()).waitForCompletion();
+			if(client.isConnected()) {
+				logger.debug("Connected to broker:- {}", getServerURI());
+				try {
+					mqttStreamManager.subscribe();
+				}catch (Exception e) {
+					logger.error("Error in subscribing to MQTT topics:- {}", e);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Error establising connecting to MQTT broker:- {}", e);
 		}
 		return client;
 	}
 	
-	@Bean
+	/*@Bean
 	@DependsOn({"mqttClient"})
 	public void subscribe() {
 		try {
@@ -42,14 +50,11 @@ public class MQTTConfiguration {
 				mqttStreamManager.subscribe();
 			}else {
 				logger.debug("Unable to subscribe to MQTT topics since the client is not connected to the server");
-				logger.debug("Retrying connection......");
-				mqttClient().connect(getOptions()).waitForCompletion();
-				mqttStreamManager.subscribe();
 			}
 		} catch (MqttException | InterruptedException e) {
 			logger.error("Error in subscribing to MQTT topics:- ", e);
 		}
-	}
+	}*/
 	
 	private String getServerURI() {
 		return "tcp://ssautohome.hopto.org:1883";
@@ -61,7 +66,7 @@ public class MQTTConfiguration {
 		options.setPassword("SS1994ekm@".toCharArray());
 		options.setAutomaticReconnect(true);
 		options.setCleanSession(true);
-		options.setConnectionTimeout(10);
+		options.setConnectionTimeout(0);
 		return options;
 	}
 }
