@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 
 import com.iot.homeAutomation.MQTT.MQTTStreamManager;
 
@@ -30,11 +31,6 @@ public class MQTTConfiguration {
 			client.connect(getOptions()).waitForCompletion();
 			if(client.isConnected()) {
 				logger.debug("Connected to broker:- {}", getServerURI());
-				try {
-					mqttStreamManager.subscribe();
-				}catch (Exception e) {
-					logger.error("Error in subscribing to MQTT topics:- {}", e);
-				}
 			}
 		} catch (Exception e) {
 			logger.error("Error establising connecting to MQTT broker:- {}", e);
@@ -42,7 +38,7 @@ public class MQTTConfiguration {
 		return client;
 	}
 	
-	/*@Bean
+	@Bean
 	@DependsOn({"mqttClient"})
 	public void subscribe() {
 		try {
@@ -54,7 +50,7 @@ public class MQTTConfiguration {
 		} catch (MqttException | InterruptedException e) {
 			logger.error("Error in subscribing to MQTT topics:- ", e);
 		}
-	}*/
+	}
 	
 	private String getServerURI() {
 		return "tcp://ssautohome.hopto.org:1883";
