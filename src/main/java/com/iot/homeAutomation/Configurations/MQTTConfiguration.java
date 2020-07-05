@@ -35,7 +35,6 @@ public class MQTTConfiguration {
 		} catch (Exception e) {
 			logger.error("Error establising connecting to MQTT broker:- {}", e);
 		}
-		logger.debug("mqtt client object id:- {}", client);
 		return client;
 	}
 	
@@ -47,7 +46,8 @@ public class MQTTConfiguration {
 				mqttStreamManager.subscribe();
 			}else {
 				logger.debug("Unable to subscribe to MQTT topics since the client is not connected to the server");
-				logger.debug("mqtt client object id:- {}", this.mqttClient());
+				this.mqttClient().reconnect();
+				logger.debug("mqtt connection status:- {}", this.mqttClient().isConnected());
 			}
 		} catch (MqttException | InterruptedException e) {
 			logger.error("Error in subscribing to MQTT topics:- ", e);
@@ -63,7 +63,7 @@ public class MQTTConfiguration {
 		options.setUserName("raspberrypi");
 		options.setPassword("SS1994ekm@".toCharArray());
 		options.setAutomaticReconnect(true);
-		options.setCleanSession(true);
+		options.setCleanSession(false);
 		options.setConnectionTimeout(0);
 		return options;
 	}
