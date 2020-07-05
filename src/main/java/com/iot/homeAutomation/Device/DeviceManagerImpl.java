@@ -18,7 +18,7 @@ import com.iot.homeAutomation.Device.DTO.WaterConfigDTO;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceAction;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityDTO;
 import com.iot.homeAutomation.DeviceActivityAudit.DeviceActivityManager;
-import com.iot.homeAutomation.MQTT.MQTTStreamManager;
+import com.iot.homeAutomation.MQTT.MQTTPublishManager;
 import com.iot.homeAutomation.MQTT.MQTTTopics;
 import com.iot.homeAutomation.SmartGardener.SmartGardenerRequestDTO;
 import com.iot.homeAutomation.User.UserManager;
@@ -42,7 +42,7 @@ public class DeviceManagerImpl implements DeviceManager {
 	UserActivityManager userActivityManager;
 	
 	@Resource
-	MQTTStreamManager mqttStreamManager;
+	MQTTPublishManager mqttStreamManager;
 	
 	@Autowired
 	ObjectMapper mapper;

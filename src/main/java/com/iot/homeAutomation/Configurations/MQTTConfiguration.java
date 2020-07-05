@@ -9,11 +9,12 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.DependsOn;
 
-import com.iot.homeAutomation.MQTT.MQTTStreamManager;
+import com.iot.homeAutomation.MQTT.MQTTSubscribeManager;
+import com.iot.homeAutomation.MQTT.MQTTTopics;
 
 @Configuration
 public class MQTTConfiguration {
@@ -21,37 +22,26 @@ public class MQTTConfiguration {
 	private static final Logger logger = LoggerFactory.getLogger(MQTTConfiguration.class);
 	
 	@Resource
-	MQTTStreamManager mqttStreamManager;
+	MQTTSubscribeManager mqttSubscribeManager;
+	
+	@Autowired
+	MQTTTopics mqttTopics;
 
 	@Bean
 	public IMqttAsyncClient mqttClient() throws MqttException, InterruptedException {
-		IMqttAsyncClient client = new MqttAsyncClient(getServerURI() , "HOME_AUTOMATION_BACKEND", new MemoryPersistence());
+		IMqttAsyncClient client = new MqttAsyncClient(getServerURI() , "HOME_AUTOMATION", new MemoryPersistence());
 		try {
 			logger.debug("Connecting to broker:- {}", getServerURI());
 			client.connect(getOptions()).waitForCompletion();
 			if(client.isConnected()) {
 				logger.debug("Connected to broker:- {}", getServerURI());
+				client.subscribe(mqttTopics.getSmartGardenerSubTopic(), 2, mqttSubscribeManager.subscribe());
+				logger.debug("Subscribed to MQTT topic:- {}", mqttTopics.getSmartGardenerSubTopic());
 			}
 		} catch (Exception e) {
 			logger.error("Error establising connecting to MQTT broker:- {}", e);
 		}
 		return client;
-	}
-	
-	@Bean
-	@DependsOn({"mqttClient"})
-	public void subscribe() {
-		try {
-			if(this.mqttClient().isConnected()) {
-				mqttStreamManager.subscribe();
-			}else {
-				logger.debug("Unable to subscribe to MQTT topics since the client is not connected to the server");
-				this.mqttClient().reconnect();
-				logger.debug("mqtt connection status:- {}", this.mqttClient().isConnected());
-			}
-		} catch (MqttException | InterruptedException e) {
-			logger.error("Error in subscribing to MQTT topics:- ", e);
-		}
 	}
 	
 	private String getServerURI() {
