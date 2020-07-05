@@ -35,6 +35,7 @@ public class MQTTConfiguration {
 		} catch (Exception e) {
 			logger.error("Error establising connecting to MQTT broker:- {}", e);
 		}
+		logger.debug("mqtt client object id:- {}", client);
 		return client;
 	}
 	
@@ -42,10 +43,11 @@ public class MQTTConfiguration {
 	@DependsOn({"mqttClient"})
 	public void subscribe() {
 		try {
-			if(mqttClient().isConnected()) {
+			if(this.mqttClient().isConnected()) {
 				mqttStreamManager.subscribe();
 			}else {
 				logger.debug("Unable to subscribe to MQTT topics since the client is not connected to the server");
+				logger.debug("mqtt client object id:- {}", this.mqttClient());
 			}
 		} catch (MqttException | InterruptedException e) {
 			logger.error("Error in subscribing to MQTT topics:- ", e);
