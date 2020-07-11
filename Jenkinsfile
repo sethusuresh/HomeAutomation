@@ -79,7 +79,7 @@ pipeline {
             steps {
             	echo "**********Deploy**********"
 	            echo "Starting the latest docker container"
-	            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 --mount type=volume,source=home_automation,target=/log/home_automation.log -d sethusuresh/home_automation'
+	            sshCommand remote: remote, command: 'docker run --name home_automation -p 9090:9090 -d sethusuresh/home_automation'
             }
         }
     }
