@@ -23,7 +23,7 @@ public class HomeAutomationApplication {
 	
 	@RequestMapping(value = "/keepalive", method = RequestMethod.GET)
 	public String health() {
-		logger.debug("keepalive");
+		logger.debug("keepalive is working");
 		return "OK";
 	}
 	
